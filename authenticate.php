@@ -4,9 +4,9 @@
     for HTTP authentication.
  */
 
-  define('ADMIN_LOGIN','wally');
+  define('ADMIN_LOGIN','admin');
 
-  define('ADMIN_PASSWORD','mypass');
+  define('ADMIN_PASSWORD','pass');
 
 
   if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])

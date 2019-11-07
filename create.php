@@ -8,39 +8,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New Post</title>
-    <link rel="stylesheet" href="style.css" type="text/css">
+    <title>New Review</title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1><a href="index.php">Joel's Blog - New Post</a></h1>
-        </div> <!-- END div id="header" -->
-<ul id="menu">
+<div id="wrapper">
+  <div id="header">
+      <h1><a href="index.php">Fresh Potatoes - New Review</a></h1>
+  </div> <!-- END div id="header" -->
+  <ul id="menu">
     <li><a href="index.php" >Home</a></li>
     <li><a href="create.php" class='active'>New Post</a></li>
-</ul> <!-- END div id="menu" -->
-<div id="all_blogs">
-  <form action="insert.php" method="post">
-    <fieldset>
-      <legend>New Blog Post</legend>
-      <p>
+  </ul> <!-- END div id="menu" -->
+  <div id="all_blogs">
+    <form action="insert.php" method="post">
+      <fieldset>
+        <legend>New Movie Review</legend>
+
+        <label for="movie">Movie</label>
+        <select name="movie" id="movie">
+          <option value="1">Lion King</option>
+          <option value="2">Joker</option>
+          <option value="3">John Wick Chapter 3</option>
+          <option value="4">Blade Runner</option>
+          <option value="5">Avengers: Endgame</option>
+          <option value="6">Mission Impossible: Fallout</option>
+          <option value="7">What We Do In The Shadows</option>
+          <option value="8">A Dog's Purpose</option>
+          <option value="9">Inglorious Bastards</option>
+          <option value="10">Nightmare Before Christmas</option>
+        </select>
+        
         <label for="title">Title</label>
         <input name="title" id="title" />
-      </p>
-      <p>
+        <br/>
         <label for="content">Content</label>
-        <textarea name="content" id="content"></textarea>
-      </p>
-      <p>
+        <textarea name="content" id="content" rows=10 cols=70></textarea>
+
         <input type="submit" name="command" value="Create" />
-      </p>
-    </fieldset>
-  </form>
-</div>
-        <div id="footer">
-            Copywrong 2019 - No Rights Reserved
-        </div> <!-- END div id="footer" -->
-    </div> <!-- END div id="wrapper" -->
+      </fieldset>
+    </form>
+  </div>
+  <div id="footer">
+      FreshPotatoes - No Rights Reserved
+  </div> <!-- END div id="footer" -->
+</div> <!-- END div id="wrapper" -->
 </body>
 </html>

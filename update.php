@@ -20,7 +20,7 @@
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 
-            $query = "UPDATE posts SET PostTitle = :title, PostContent = :content WHERE PostId = :id";
+            $query = "UPDATE reviews SET Title = :title, Content = :content WHERE ReviewID = :id";
             $statement = $db->prepare($query);
             $statement->bindValue(':title', $title);
             $statement->bindValue(':content', $content);
@@ -34,7 +34,7 @@
     }
     elseif ($_POST['command'] == 'Delete') {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-        $query = "DELETE FROM posts WHERE PostId = :id";
+        $query = "DELETE FROM reviews WHERE ReviewID = :id";
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();

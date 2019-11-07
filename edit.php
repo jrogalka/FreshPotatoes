@@ -14,24 +14,25 @@
     }
     else {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        $query = "SELECT * FROM posts WHERE PostId = :id";
+        $query = "SELECT * FROM reviews WHERE ReviewID = :id";
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
-        $post = $statement->fetchAll();
+        $review = $statement->fetchAll();
     }
+    var_dump($review);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Joel's Blog - Edit Post</title>
+    <title>Fresh Potatoes - Edit Post</title>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1><a href="index.php">Joel's Blog - Edit Post</a></h1>
+            <h1>Fresh Potatoes - Edit Review <?=$review[0]['Title']?></h1>
         </div> <!-- END div id="header" -->
         <ul id="menu">
             <li><a href="index.php" >Home</a></li>
@@ -43,14 +44,14 @@
                     <legend>Edit Blog Post</legend>
                     <p>
                         <label for="title">Title</label>
-                        <input name="title" id="title" value="<?=$post[0]['PostTitle']?>" />
+                        <input name="title" id="title" value="<?=$review[0]['Title']?>" />
                     </p>
                     <p>
                         <label for="content">Content</label>
-                        <textarea name="content" id="content" placeholder="<?=$post[0]['PostContent']?>"></textarea>
+                        <textarea name="content" id="content" ><?=$review[0]['Content']?></textarea>
                     </p>
                     <p>
-                        <input type="hidden" name="id" value="<?=$post[0]['PostId']?>" />
+                        <input type="hidden" name="id" value="<?=$review[0]['ReviewID']?>" />
                         <input type="submit" name="command" value="Update" />
                         <input type="submit" name="command" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" />
                     </p>
