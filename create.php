@@ -17,7 +17,8 @@
   </div> <!-- END div id="header" -->
   <ul id="menu">
     <li><a href="index.php" >Home</a></li>
-    <li><a href="create.php" class='active'>New Post</a></li>
+    <li><a href="create.php">New Post</a></li>
+    <li><a href="newMovie.php">New Movie</a></li>
   </ul> <!-- END ul id="menu" -->
   <div id="all_blogs">
     <form action="insert.php" method="post">
@@ -36,6 +37,8 @@
           <option value="8">A Dog's Purpose</option>
           <option value="9">Inglorious Bastards</option>
           <option value="10">Nightmare Before Christmas</option>
+          <option value="11">Speed</option>
+          <option value="12">Baby Driver</option>
         </select>
         
         <label for="title">Title</label>

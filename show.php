@@ -32,11 +32,12 @@
 <body>
     <div id="wrapper">
         <div id="header">
-            <h1>Joel's Blog - <?=$review[0]['Title']?></h1>
+            <h1>FreshPotatoes - <?=$review[0]['Title']?></h1>
         </div> <!-- END div id="header" -->
         <ul id="menu">
             <li><a href="index.php" >Home</a></li>
             <li><a href="create.php" >New Post</a></li>
+            <li><a href="newMovie.php">New Movie</a></li>
         </ul> <!-- END div id="menu" -->
         <div id="all_blogs">
             <div class="blog_post">

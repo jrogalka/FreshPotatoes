@@ -36,6 +36,7 @@
         <ul id="menu">
             <li><a href="index.php" >Home</a></li>
             <li><a href="create.php" >New Post</a></li>
+            <li><a href="newMovie.php">New Movie</a></li>
         </ul> <!-- END div id="menu" -->
         <div id="all_blogs">
             <form action="update.php" method="post">
