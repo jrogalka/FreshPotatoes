@@ -13,12 +13,12 @@
 <body>
 <div id="wrapper">
   <div id="header">
-      <h1><a href="index.php">Fresh Potatoes - New Review</a></h1>
+      <h1>Fresh Potatoes - New Review</h1>
   </div> <!-- END div id="header" -->
   <ul id="menu">
     <li><a href="index.php" >Home</a></li>
     <li><a href="create.php" class='active'>New Post</a></li>
-  </ul> <!-- END div id="menu" -->
+  </ul> <!-- END ul id="menu" -->
   <div id="all_blogs">
     <form action="insert.php" method="post">
       <fieldset>

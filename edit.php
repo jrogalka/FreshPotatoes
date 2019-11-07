@@ -20,7 +20,6 @@
         $statement->execute();
         $review = $statement->fetchAll();
     }
-    var_dump($review);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +47,7 @@
                     </p>
                     <p>
                         <label for="content">Content</label>
-                        <textarea name="content" id="content" ><?=$review[0]['Content']?></textarea>
+                        <textarea name="content" id="content" rows=10 cols=70><?=$review[0]['Content']?></textarea>
                     </p>
                     <p>
                         <input type="hidden" name="id" value="<?=$review[0]['ReviewID']?>" />
@@ -59,7 +58,7 @@
             </form>
         </div>
         <div id="footer">
-            Copywrong 2019 - No Rights Reserved
+            FreshPotatoes 2019 - No Rights Reserved
         </div> <!-- END div id="footer" -->
     </div> <!-- END div id="wrapper" -->
 </body>
