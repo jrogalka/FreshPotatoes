@@ -6,7 +6,7 @@
 
   define('USER_LOGIN','user');
 
-  define('USER_PASSWORD','user');
+  define('USER_PASSWORD','pass');
 
 
   if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])
