@@ -1,5 +1,11 @@
 <?php
     require 'adminAuthenticate.php';
+    include 'connect.php';
+    $query = "SELECT DISTINCT Category FROM categories";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $categories = $statement->fetchAll();
+    var_dump($categories[0]);
 ?>
 <html>
 <head>
@@ -60,7 +66,9 @@
                             <div class="form-group">
                               <label for="category">Category</label>
                               <select class="form-control" name="category" id="category">
-                                  <option value="0">Sample</option>
+                                    <?php for ($i=0; $i < count($categories); $i++) :?>
+                                        <option value="<?=$categories[$i]['Category']?>"><?=$categories[$i]['Category']?></option>
+                                    <?php endfor ?>
                               </select>
                             </div>
                             <div class="form-group">
