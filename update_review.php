@@ -9,6 +9,8 @@
     include 'connect.php';
     $title = $_POST['title'];
     $content = $_POST['content'];
+    $movie = $_POST['movie'];
+    $stars = $_POST['stars'];
 
     if ($_POST['command'] == 'Update') {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -18,12 +20,15 @@
 
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $stars = filter_input(INPUT_POST, 'stars', FILTER_SANITIZE_NUMBER_INT);
 
 
-            $query = "UPDATE reviews SET Title = :title, Content = :content WHERE ReviewID = :id";
+            $query = "UPDATE reviews SET Title = :title, Content = :content, MovieID = :movie, Stars = :stars WHERE ReviewID = :id";
             $statement = $db->prepare($query);
             $statement->bindValue(':title', $title);
             $statement->bindValue(':content', $content);
+            $statement->bindValue(':movie', $movie);
+            $statement->bindValue(':stars', $stars);
             $statement->bindValue(':id', $id, PDO::PARAM_INT);
             $statement->execute();
         }

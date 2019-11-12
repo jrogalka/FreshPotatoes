@@ -37,11 +37,11 @@
 <body>
     <div class="jumbotron">
         <img src="images/logo.png" alt="logo" width="150px" height="150px">
-        <h1>FreshPotatoes - <?=$review[0]['Title']?></h1>
+        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes - <?=$review[0]['Title']?></a></h1>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php">Navigaton</a>
+            <a class="navbar-brand" href="index.php">Navigation</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -52,31 +52,35 @@
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="create.php">New Review</a>
-                    </li>
+                        <a class="nav-link" href="create_review.php">New Review</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="newMovie.php">New Movie</a>
+                        <a class="nav-link" href="create_movie.php">New Movie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create_category.php">New Category</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div id="all_blogs">
-            <div class="blog_post">
-                <h2><?=$review[0]['Title']?></h2>
-                <p>
-                    <small>
-                        <a href="edit.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a>
-                    </small>
-                </p>
-                <div class='blog_content'>
-                    <?=$review[0]['Content']?>
+        <div class="container">
+            <div class="row">
+                <div class="col" style="border: 1px solid black; margin: 5px;">
+                    <h2><?=$review[0]['Title']?></h2>
+                    <div class='blog_content'>
+                        <?=$review[0]['Content']?>
+                    </div>
+                    <p>
+                        <small>
+                            <a href="edit.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a>
+                        </small>
+                    </p>
                 </div>
             </div>
         </div>
-        <div id="footer">
+        <div class="footer-copyright text-left py-4">
             FreshPotatoes 2019 - No Rights Reserved
         </div>
-    </div> <!-- END div id="wrapper" -->
+    </div>
 </body>
 </html>
