@@ -5,4 +5,6 @@
 
     // Create a PDO object called $db.
     $db = new PDO(DB_DSN, DB_USER, DB_PASS);
+
+    session_start();
 ?>

@@ -23,7 +23,7 @@
 
 <body>
     <div class="jumbotron">
-        <img src="images/logo.png" alt="logo" width="150px" height="150px">
+        <img src="images/logo.png" alt="logo" width="150" height="150">
         <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes</a></h1>
     </div>
     <div class="container">
@@ -51,8 +51,16 @@
                         <a class="nav-link" href="all_movies.php">All Movies <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="login.php">Login</a>
-                    </li>
+                        <?php if(isset($_SESSION['UserId'])): ?>
+                                <a class="nav-link" href="logout.php">Logout</a>
+                            </li>
+                        <?php else:?>
+                                <a class="nav-link" href="login.html">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="register.html">Register</a>
+                            </li>
+                        <?php endif ?>
                 </ul>
             </div>
         </nav>
