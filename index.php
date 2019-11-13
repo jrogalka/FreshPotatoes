@@ -1,9 +1,15 @@
 <?php
     include 'connect.php';
-    $query = "SELECT * FROM reviews ORDER BY ReviewID DESC";
-    $statement = $db->prepare($query);
-    $statement->execute();
-    $reviews = $statement->fetchAll();
+    $review_query = "SELECT * FROM reviews ORDER BY ReviewID DESC";
+    $review_statement = $db->prepare($review_query);
+    $review_statement->execute();
+    $reviews = $review_statement->fetchAll();
+
+    $movie_query = "SELECT movie.Title FROM movie
+                    JOIN reviews ON reviews.MovieID = movie.MovieID";
+    $movie_statement = $db->prepare($movie_query);
+    $movie_statement->execute();
+    $movie = $movie_statement->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,16 +58,16 @@
         </nav>
 
         <div class='container'>
-            <?php foreach ($reviews as $current): ?>
+            <?php for($i=0; $i<count($reviews); $i++): ?>
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px;">
-                    <h2><a href="show.php?id=<?=$current['ReviewID']?>"><?=$current['Title']?></a></h2>
-                    <h3>Placeholder for movie title. Movie ID: <?=$current['MovieID']?></h3>
-                    <p><small><a href="edit.php?id=<?=$current['ReviewID']?>">Edit/Delete</a></small></p>
-                    <p><?=$current['Content']?></p>
+                    <h2><a href="show.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
+                    <h3><?=$movie[$i]['Title']?></h3>
+                    <p><small><a href="edit.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
+                    <p><?=$reviews[$i]['Content']?></p>
                 </div>
             </div>
-            <?php endforeach ?>
+            <?php endfor ?>
         </div>
         <div class="footer-copyright text-left py-4">
             FreshPotatoes 2019 - No Rights Reserved

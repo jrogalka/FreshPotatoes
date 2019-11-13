@@ -1,11 +1,13 @@
 <?php
+/*
+    connect.php - Establish conneciton to DB.
+ */
     require 'adminAuthenticate.php';
     include 'connect.php';
     $query = "SELECT DISTINCT Category FROM categories";
     $statement = $db->prepare($query);
     $statement->execute();
     $categories = $statement->fetchAll();
-    var_dump($categories[0]);
 ?>
 <html>
 <head>

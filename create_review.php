@@ -1,8 +1,13 @@
 <?php
 /*
-    require.php - Enables HTTP authentication to the page.
+    connect.php - Establish conneciton to DB.
  */
     require 'authenticate.php';
+    include 'connect.php';
+    $query = "SELECT * FROM movie";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $movies = $statement->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,18 +63,9 @@
                             <div class="form-group">
                               <label for="movie">Movie</label>
                               <select class="form-control" name="movie" id="movie">
-                                  <option value="1">Lion King</option>
-                                  <option value="2">Joker</option>
-                                  <option value="3">John Wick Chapter 3</option>
-                                  <option value="4">Blade Runner</option>
-                                  <option value="5">Avengers: Endgame</option>
-                                  <option value="6">Mission Impossible: Fallout</option>
-                                  <option value="7">What We Do In The Shadows</option>
-                                  <option value="8">A Dog's Purpose</option>
-                                  <option value="9">Inglorious Bastards</option>
-                                  <option value="10">Nightmare Before Christmas</option>
-                                  <option value="11">Speed</option>
-                                  <option value="12">Baby Driver</option>
+                                    <?php for ($i=0; $i < count($movies); $i++) :?>
+                                        <option value="<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></option>
+                                    <?php endfor ?>
                               </select>
                             </div>
 
@@ -83,7 +79,7 @@
                             </div>
                             <div class="form-group">
                               <label for="stars">Rating</label>
-                              <input type="number" name="stars" id="stars" max=5 min=0>
+                              <input type="number" name="stars" id="stars" max=5 min=0 value=0>
                             </div>
                             <div class="form-group">
                               <input class="btn btn-primary" type="submit" name="command" value="Create" />
