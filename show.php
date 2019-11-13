@@ -18,6 +18,13 @@
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
         $review = $statement->fetchAll();
+
+        $movie_query = "SELECT movie.Title FROM movie
+                        JOIN reviews ON reviews.MovieID = movie.MovieID
+                        WHERE reviews.ReviewID = $id";
+        $movie_statement = $db->prepare($movie_query);
+        $movie_statement->execute();
+        $movie = $movie_statement->fetchAll();
     }
 ?>
 
@@ -67,12 +74,13 @@
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px;">
                     <h2><?=$review[0]['Title']?></h2>
+                    <h3><?=$movie[0]['Title']?></h3>
                     <div class='blog_content'>
                         <?=$review[0]['Content']?>
                     </div>
                     <p>
                         <small>
-                            <a href="edit.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a>
+                            <a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a>
                         </small>
                     </p>
                 </div>

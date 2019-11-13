@@ -6,7 +6,8 @@
     $reviews = $review_statement->fetchAll();
 
     $movie_query = "SELECT movie.Title FROM movie
-                    JOIN reviews ON reviews.MovieID = movie.MovieID";
+                    JOIN reviews ON reviews.MovieID = movie.MovieID
+                    ORDER BY reviews.ReviewID DESC";
     $movie_statement = $db->prepare($movie_query);
     $movie_statement->execute();
     $movie = $movie_statement->fetchAll();
@@ -59,14 +60,14 @@
 
         <div class='container'>
             <?php for($i=0; $i<count($reviews); $i++): ?>
-            <div class="row">
-                <div class="col" style="border: 1px solid black; margin: 5px;">
-                    <h2><a href="show.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
-                    <h3><?=$movie[$i]['Title']?></h3>
-                    <p><small><a href="edit.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
-                    <p><?=$reviews[$i]['Content']?></p>
+                <div class="row">
+                    <div class="col" style="border: 1px solid black; margin: 5px;">
+                        <h2><a href="show.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
+                        <h3><?=$movie[$i]['Title']?></h3>
+                        <p><?=$reviews[$i]['Content']?></p>
+                        <p><small><a href="edit_review.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
+                    </div>
                 </div>
-            </div>
             <?php endfor ?>
         </div>
         <div class="footer-copyright text-left py-4">
