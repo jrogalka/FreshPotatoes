@@ -8,7 +8,6 @@
     $category = $_POST['category'];
     if (strlen($category) >= 1) {
         include 'connect.php';
-
         $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         $query = "INSERT INTO categories (Category) values (:category)";

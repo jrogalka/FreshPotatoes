@@ -1,16 +1,11 @@
 <?php
     include 'connect.php';
-    $review_query = "SELECT * FROM reviews ORDER BY ReviewID DESC";
+    $review_query = "SELECT reviews.*, movie.Title AS movieTitle FROM reviews
+                     JOIN movie ON movie.MovieID = reviews.MovieID
+                     ORDER BY ReviewID DESC";
     $review_statement = $db->prepare($review_query);
     $review_statement->execute();
     $reviews = $review_statement->fetchAll();
-
-    $movie_query = "SELECT movie.Title FROM movie
-                    JOIN reviews ON reviews.MovieID = movie.MovieID
-                    ORDER BY reviews.ReviewID DESC";
-    $movie_statement = $db->prepare($movie_query);
-    $movie_statement->execute();
-    $movie = $movie_statement->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,6 +49,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="create_category.php">New Category</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="all_movies.php">All Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -62,9 +63,10 @@
             <?php for($i=0; $i<count($reviews); $i++): ?>
                 <div class="row">
                     <div class="col" style="border: 1px solid black; margin: 5px;">
-                        <h2><a href="show.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
-                        <h3><?=$movie[$i]['Title']?></h3>
+                        <h2><a href="show_review.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
+                        <h3><?=$reviews[$i]['movieTitle']?></h3>
                         <p><?=$reviews[$i]['Content']?></p>
+                        <p><small>Reviewed on: <?=$reviews[$i]['CreatedOn']?></small></p>
                         <p><small><a href="edit_review.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
                     </div>
                 </div>

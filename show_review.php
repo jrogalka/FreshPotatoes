@@ -13,18 +13,14 @@
     }
     else {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        $query = "SELECT * FROM reviews WHERE ReviewID = :id";
-        $statement = $db->prepare($query);
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
-        $review = $statement->fetchAll();
+        $review_query = "SELECT reviews.Title, reviews.Content, reviews.Stars, reviews.CreatedOn, movie.Title AS movieTitle FROM reviews
+                     JOIN movie ON movie.MovieID = reviews.MovieID
+                     WHERE reviews.ReviewID = :id";
 
-        $movie_query = "SELECT movie.Title FROM movie
-                        JOIN reviews ON reviews.MovieID = movie.MovieID
-                        WHERE reviews.ReviewID = $id";
-        $movie_statement = $db->prepare($movie_query);
-        $movie_statement->execute();
-        $movie = $movie_statement->fetchAll();
+        $review_statement = $db->prepare($review_query);
+            $review_statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $review_statement->execute();
+            $review = $review_statement->fetchAll();
     }
 ?>
 
@@ -67,22 +63,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="create_category.php">New Category</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="all_movies.php">All Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
                 </ul>
             </div>
         </nav>
         <div class="container">
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px;">
-                    <h2><?=$review[0]['Title']?></h2>
-                    <h3><?=$movie[0]['Title']?></h3>
-                    <div class='blog_content'>
+                    <h1><?=$review[0]['Title']?></h1>
+                    <h5 style="border-bottom: 1px solid black; margin-bottom: 5px; padding-bottom: 5px;"><?=$review[0]['movieTitle']?></h5>
+                    <div>
                         <?=$review[0]['Content']?>
                     </div>
-                    <p>
-                        <small>
-                            <a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a>
-                        </small>
-                    </p>
+                    <p style='margin-top: 5px;'><small>Reviewed On: <?=$review[0]['CreatedOn']?></small></p>
+                    <p><small><a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a></small></p>
                 </div>
             </div>
         </div>

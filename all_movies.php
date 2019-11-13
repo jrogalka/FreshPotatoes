@@ -1,8 +1,4 @@
 <?php
-/*
-    connect.php - Establish conneciton to DB.
- */
-    require 'authenticate.php';
     include 'connect.php';
     $query = "SELECT * FROM movie";
     $statement = $db->prepare($query);
@@ -22,13 +18,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <title>New Review</title>
+    <title>Fresh Potatoes</title>
 </head>
 
 <body>
     <div class="jumbotron">
-        <img src="images/logo.png" alt="logo" width="150" height="150">
-        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes - New Review</a></h1>
+        <img src="images/logo.png" alt="logo" width="150px" height="150px">
+        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes</a></h1>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -42,8 +38,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="create_review.php">New Review <span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="create_review.php">New Review</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="create_movie.php">New Movie</a>
@@ -51,8 +47,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="create_category.php">New Category</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="all_movies.php">All Movies</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="all_movies.php">All Movies <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="login.php">Login</a>
@@ -60,43 +56,21 @@
                 </ul>
             </div>
         </nav>
-        <div class="container">
-            <div class="row">
-                <div class="col" style="border: 1px solid black; margin: 5px;">
-                    <form action="insert_review.php" method="post">
-                        <fieldset>
-                            <legend>New Movie Review</legend>
-                            <div class="form-group">
-                              <label for="movie">Movie</label>
-                              <select class="form-control" name="movie" id="movie">
-                                    <?php for ($i=0; $i < count($movies); $i++) :?>
-                                        <option value="<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></option>
-                                    <?php endfor ?>
-                              </select>
-                            </div>
 
-                            <div class="form-group">
-                              <label for="title">Title</label>
-                              <input class="form-control" name="title" id="title" />
-                            </div>
-                            <div class="form-group">
-                              <label for="content">Content</label>
-                              <textarea class="form-control" name="content" id="content" rows=10 cols=70></textarea>
-                            </div>
-                            <div class="form-group">
-                              <label for="stars">Rating</label>
-                              <input type="number" name="stars" id="stars" max=5 min=0 value=0>
-                            </div>
-                            <div class="form-group">
-                              <input class="btn btn-primary" type="submit" name="command" value="Create" />
-                            </div>
-                        </fieldset>
-                    </form>
+        <div class='container'>
+            <?php for($i=0; $i<count($movies); $i++): ?>
+                <div class="row">
+                    <div class="col" style="border: 1px solid black; margin: 5px;">
+                        <h2><a href="show_movie.php?id=<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></a></h2>
+                        <p><?=$movies[$i]['Description']?></p>
+                        <p><small>Added On: <?=$movies[$i]['AddedOn']?></small></p>
+                        <p><small><a href="edit_movie.php?id=<?=$movies[$i]['MovieID']?>">Edit/Delete</a></small></p>
+                    </div>
                 </div>
-            </div>
+            <?php endfor ?>
         </div>
         <div class="footer-copyright text-left py-4">
-            FreshPotatoes - No Rights Reserved
+            FreshPotatoes 2019 - No Rights Reserved
         </div>
     </div>
 </body>
