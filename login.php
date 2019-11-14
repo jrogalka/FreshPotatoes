@@ -10,7 +10,7 @@
 
 
         /*
-            In the following query, we will use the COLLATE function to stop the query from converting all characters to lowercase.
+            In the following query, I will use the COLLATE function to stop the query from converting all characters to lowercase.
             Wihtout this, the query would produce the following:
             Input: UserName, PassWord
             Value: username, password
