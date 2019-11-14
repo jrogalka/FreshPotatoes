@@ -6,7 +6,6 @@
     Query the database for all data from posts with the matching ID as the GET parameter.
     If the id parameter is not an int, redirect to the home page.
  */
-    require 'authenticate.php';
     include 'connect.php';
     if (filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) == false){
         header('Location: index.php');
@@ -19,6 +18,13 @@
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
         $review = $statement->fetchAll();
+        
+        if (!isset($_SESSION['UserId'])) {
+            echo '<script language="javascript">';
+            echo 'alert("You must be logged in to access this page.");';
+            echo 'window.location.href = "index.php";';
+            echo '</script>';
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -49,22 +55,29 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</span></a>
+                        <a class="nav-link" href="index.php">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_review.php">New Review</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_movie.php">New Movie</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_category.php">New Category</a>
-                    </li>
+                    <?php if(isset($_SESSION['UserId']) && $_SESSION['Role'] == 1) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_movie.php">New Movie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_category.php">New Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                    <?php elseif (isset($_SESSION['UserId'])) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                    <?php endif ?>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="all_movies.php">All Movies</a>
                     </li>
                     <li class="nav-item">
-                        <?php if(isset($_SESSION['UserId'])): ?>
+                        <?php if(isset($_SESSION['UserId'])) :?>
                                 <a class="nav-link" href="logout.php">Logout</a>
                             </li>
                         <?php else:?>
@@ -74,6 +87,8 @@
                                 <a class="nav-link" href="register.html">Register</a>
                             </li>
                         <?php endif ?>
+                    
+                    
                 </ul>
             </div>
         </nav>

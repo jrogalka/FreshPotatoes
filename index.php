@@ -1,11 +1,14 @@
 <?php
     include 'connect.php';
-    $review_query = "SELECT reviews.*, movie.Title AS movieTitle FROM reviews
+    $review_query = "SELECT reviews.*, movie.Title AS movieTitle, users.Username FROM reviews
                      JOIN movie ON movie.MovieID = reviews.MovieID
+                     JOIN users ON users.UserID = reviews.UserID
                      ORDER BY ReviewID DESC";
     $review_statement = $db->prepare($review_query);
     $review_statement->execute();
     $reviews = $review_statement->fetchAll();
+
+    $userQuery = "SELECT * FROM users";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,20 +43,27 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_review.php">New Review</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_movie.php">New Movie</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_category.php">New Category</a>
-                    </li>
+                    <?php if(isset($_SESSION['UserId']) && $_SESSION['Role'] == 1) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_movie.php">New Movie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_category.php">New Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                    <?php elseif (isset($_SESSION['UserId'])) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                    <?php endif ?>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="all_movies.php">All Movies</a>
                     </li>
                     <li class="nav-item">
-                        <?php if(isset($_SESSION['UserId'])): ?>
+                        <?php if(isset($_SESSION['UserId'])) :?>
                                 <a class="nav-link" href="logout.php">Logout</a>
                             </li>
                         <?php else:?>
@@ -76,8 +86,14 @@
                         <h2><a href="show_review.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
                         <h3><?=$reviews[$i]['movieTitle']?></h3>
                         <p><?=$reviews[$i]['Content']?></p>
-                        <p><small>Reviewed on: <?=$reviews[$i]['CreatedOn']?></small></p>
-                        <p><small><a href="edit_review.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
+                        <p><small>Reviewed by: <a href="#"><?=$reviews[$i]['Username']?></a></small></p>
+                        <p><small>On: <?=$reviews[$i]['CreatedOn']?></small></p>
+                        <?php if(isset($_SESSION['UserId'])) :?>
+                            <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $reviews[$i]['UserID']) :?>
+                                <p><small><a href="edit_review.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
+                            <?php endif ?>
+                        <?php endif ?>
+                        
                     </div>
                 </div>
             <?php endfor ?>

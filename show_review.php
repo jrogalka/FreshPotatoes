@@ -55,19 +55,28 @@
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="create_review.php">New Review</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_movie.php">New Movie</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create_category.php">New Category</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="all_movies.php">All Movies</a>
                     </li>
+                    <?php if(isset($_SESSION['UserId']) && $_SESSION['Role'] == 1) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_movie.php">New Movie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_category.php">New Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="all_users.php" class="nav-link">All Users</a>
+                        </li>
+                    <?php elseif (isset($_SESSION['UserId'])) :?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="create_review.php">New Review</a>
+                        </li>
+                    <?php endif ?>
                     <li class="nav-item">
-                        <?php if(isset($_SESSION['UserId'])): ?>
+                        <?php if(isset($_SESSION['UserId'])) :?>
                                 <a class="nav-link" href="logout.php">Logout</a>
                             </li>
                         <?php else:?>
@@ -77,6 +86,8 @@
                                 <a class="nav-link" href="register.html">Register</a>
                             </li>
                         <?php endif ?>
+                    
+                    
                 </ul>
             </div>
         </nav>
