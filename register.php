@@ -1,6 +1,6 @@
 <?php
     include 'connect.php';
-    if (isset($_POST['submit'])) {
+    if (isset($_POST['command'])) {
         $username = $_POST['username'];
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);
         $password = $_POST['password'];

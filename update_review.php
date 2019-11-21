@@ -44,5 +44,5 @@
         
     }
     header('Location: index.php');
-        exit;
+    exit;
 ?>

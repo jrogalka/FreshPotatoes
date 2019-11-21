@@ -1,11 +1,4 @@
 <?php
-/*
-    authenticate.php - Calls the script for HTTP validation.
-    connect.php - Calls the script to connect to the database.
-
-    Query the database for all data from posts with the matching ID as the GET parameter.
-    If the id parameter is not an int, redirect to the home page.
- */
     include 'connect.php';
     if (filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) == false){
         header('Location: index.php');

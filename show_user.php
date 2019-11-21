@@ -1,30 +1,34 @@
 <?php
     include 'connect.php';
-    $query = "SELECT * FROM movie";
-    $statement = $db->prepare($query);
-    $statement->execute();
-    $movies = $statement->fetchAll();
+    if (filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) == false){
+        header('Location: index.php');
+        exit;
+    }
+    else{
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $query = "SELECT * FROM users WHERE UserID = :id";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->execute();
+        $user = $statement->fetch();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <title>Fresh Potatoes</title>
+    <title>Fresh Potatoes - </title>
 </head>
-
 <body>
     <div class="jumbotron">
         <img src="images/logo.png" alt="logo" width="150" height="150">
-        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes</a></h1>
+        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes - </a></h1>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -55,7 +59,7 @@
                     <?php endif ?>
                     
                     <li class="nav-item active">
-                        <a class="nav-link" href="all_movies.php">All Movies <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="all_movies.php">All Movies</a>
                     </li>
                     <li class="nav-item">
                         <?php if(isset($_SESSION['UserId'])) :?>
@@ -71,23 +75,16 @@
                 </ul>
             </div>
         </nav>
-
-        <div class='container'>
-            <?php for($i=0; $i<count($movies); $i++): ?>
-                <div class="row">
-                    <div class="col" style="border: 1px solid black; margin: 5px;">
-                        <h2><a href="show_movie.php?id=<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></a></h2>
-                        <p><?=$movies[$i]['Description']?></p>
-                        <p><small>Added On: <?=$movies[$i]['AddedOn']?></small></p>
-                        <p><small><a href="edit_movie.php?id=<?=$movies[$i]['MovieID']?>">Edit/Delete</a></small></p>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col" style="border: 1px solid black; margin: 5px; text-align: center;">
+                    <h1><?=$user['Username']?></h1>
                 </div>
-            <?php endfor ?>
+            </div>
         </div>
         <div class="footer-copyright text-left py-4">
             FreshPotatoes 2019 - No Rights Reserved
         </div>
     </div>
 </body>
-
 </html>
