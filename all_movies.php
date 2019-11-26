@@ -1,45 +1,10 @@
-<!-- $ratingQuery = "SELECT IFNULL(AVG(reviews.Stars), 0) AS Average FROM reviews
-                    JOIN movie ON movie.MovieID = reviews.MovieID
-                    GROUP BY movie.MovieID";
-    $ratingStatement = $db->prepare($ratingQuery);
-    $ratingStatement->execute();
-    $averageRating = $ratingStatement->fetchAll();
-
-    $ratings = [];
-    for ($x = 0; $x <= sizeOf($averageRating) - 1; $x++) {
-        array_push($ratings, $averageRating[$x][0]);
-    }
-    for ($i=0; $i <= sizeOf($movies) - sizeOf($ratings); $i++) { 
-        array_push($ratings, -1);
-    } -->
 <?php
     include 'connect.php';
-    $query = "SELECT movie.Title, DISTINCT movie.MovieID AS MovieID, movie.Description, movie.AddedOn, reviews.Stars FROM movie
-              LEFT JOIN reviews ON reviews.MovieID = movie.MovieID
+    $query = "SELECT movie.Title, movie.MovieID AS MovieID, movie.Description, movie.AddedOn FROM movie
               ORDER BY movie.Title";
     $statement = $db->prepare($query);
     $statement->execute();
     $movies = $statement->fetchAll();
-    for ($i=0; $i < count($movies); $i++) { 
-        if (is_null($movies[$i]['Stars'])) {
-            $movies[$i]['Stars'] = -1;
-        }
-        else {
-            var_dump(getAverage($movies[$i]['MovieID']));
-        }
-    }
-    
-    function getAverage($id){
-            // Create a PDO object called $db.
-        $db = new PDO(DB_DSN, DB_USER, DB_PASS);
-        $averageQuery = "SELECT AVG(Stars) FROM reviews
-                         WHERE reviews.MovieID = :id";
-        $averageStatement = $db->prepare($averageQuery);
-        $averageStatement->bindValue(':id', $id, PDO::PARAM_INT);
-        $averageStatement->execute();
-        $average = $averageStatement->fetch();
-        return $average;
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,18 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link rel="icon" href="images/logo.ico" type="image/ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <title>Fresh Potatoes</title>
+    <title>Fresh Potatoes - All Movies</title>
 </head>
 
 <body>
     <div class="jumbotron">
         <img src="images/logo.png" alt="logo" width="150" height="150">
-        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes</a></h1>
+        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes - All Movies</a></h1>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -110,9 +76,6 @@
                 </ul>
             </div>
         </nav>
-
-
-
         <div class='container'>
             <?php for($i=0; $i<count($movies); $i++): ?>
                 <div class="row">
@@ -120,33 +83,6 @@
                         <h2><a href="show_movie.php?id=<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></a></h2>
                         <p><?=$movies[$i]['Description']?></p>
                         <p><small>Added On: <?=$movies[$i]['AddedOn']?></small></p>
-                        <?php if(($movies[$i]['Stars']) == -1) :?>
-                            <p>No Ratings.</p>
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 0) :?>
-                            <img src="images/stars_0.png" alt="0 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 0.5) :?>
-                            <img src="images/stars_0_5.png" alt="0.5 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 1) :?>
-                            <img src="images/stars_1.png" alt="1 star" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 1.5) :?>
-                            <img src="images/stars_1_5.png" alt="1.5 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 2) :?>
-                            <img src="images/stars_2.png" alt="2 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 2.5) :?>
-                            <img src="images/stars_2_5.png" alt="2.5 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 3) :?>
-                            <img src="images/stars_3.png" alt="3 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 3.5) :?>
-                            <img src="images/stars_3_5.png" alt="3.5 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 4) :?>
-                            <img src="images/stars_4.png" alt="4 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 4.5) :?>
-                            <img src="images/stars_4_5.png" alt="4.5 stars" style="margin-bottom: 5px;">
-                        <?php elseif (round($movies[$i]['Stars'], 1) == 5) :?>
-                            <img src="images/stars_5.png" alt="5 stars" style="margin-bottom: 5px;">
-                        <?php endif ?>
-                        
-                        
                         <p><small><a href="edit_movie.php?id=<?=$movies[$i]['MovieID']?>">Edit/Delete</a></small></p>
                     </div>
                 </div>

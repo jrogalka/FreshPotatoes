@@ -13,7 +13,7 @@
     }
     else {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        $review_query = "SELECT reviews.ReviewID, reviews.Title, reviews.Content, reviews.Stars, reviews.CreatedOn, movie.Title AS movieTitle FROM reviews
+        $review_query = "SELECT reviews.ReviewID, reviews.Title, reviews.Content, AVG(reviews.Stars) AS Stars, reviews.CreatedOn, movie.Title AS movieTitle, movie.MovieID AS movieID FROM reviews
                      JOIN movie ON movie.MovieID = reviews.MovieID
                      WHERE reviews.ReviewID = :id";
         $review_statement = $db->prepare($review_query);
@@ -47,6 +47,8 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="icon" href="images/logo.ico" type="image/ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -111,19 +113,10 @@
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px;">
                     <h1><?=$review[0]['Title']?></h1>
-                    <h5 style="border-bottom: 1px solid black; margin-bottom: 5px; padding-bottom: 5px;"><?=$review[0]['movieTitle']?></h5>
-                    <div>
+                    <h5 style="border-bottom: 1px solid black; margin-bottom: 5px; padding-bottom: 5px;"><a href="show_movie.php?id=<?=$review[0]['movieID']?>"><?=$review[0]['movieTitle']?></a></h5>
+                    <div style="padding-bottom: 10px;">
                         <?=$review[0]['Content']?>
                     </div>
-                    <p style='margin-top: 5px;'><small>Reviewed On: <?=$review[0]['CreatedOn']?></small></p>
-                    <?php if(isset($_SESSION['UserId'])) :?>
-                        <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $reviews[$i]['UserID']) :?>
-                            <p><small><a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a></small></p>
-                        <?php endif ?>
-                        <p><small><a href="create_comment.php?id=<?=$review[0]['ReviewID']?>">Comment</a></small></p>
-                    <?php endif ?>
-                    <p><small>Reviewed by: <a href="show_user.php?id=<?=$user['UserID']?>"><?=$user['Username']?></a></small></p>
-
                     <!-- Rating Image -->
                     <?php if($review[0]['Stars'] == 0) :?>
                         <img src="images/stars_0.png" alt="0 Stars" style="margin-bottom: 5px;">
@@ -137,6 +130,14 @@
                         <img src="images/stars_4.png" alt="4 Stars" style="margin-bottom: 5px;">
                     <?php elseif($review[0]['Stars'] == 5) :?>
                         <img src="images/stars_5.png" alt="5 Stars" style="margin-bottom: 5px;">
+                    <?php endif ?>
+                    <p style='margin-top: 5px;'><small>Reviewed On: <?=$review[0]['CreatedOn']?></small></p>
+                    <p><small>Reviewed by: <a href="show_user.php?id=<?=$user['UserID']?>"><?=$user['Username']?></a></small></p>
+                    <?php if(isset($_SESSION['UserId'])) :?>
+                        <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $user['UserID']) :?>
+                            <p><small><a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a></small></p>
+                        <?php endif ?>
+                        <p><small><a href="create_comment.php?id=<?=$review[0]['ReviewID']?>">Comment</a></small></p>
                     <?php endif ?>
                 </div>
             </div>

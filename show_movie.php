@@ -20,6 +20,16 @@
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
         $movie = $statement->fetchAll();
+
+        $averageQuery = "SELECT AVG(Stars) AS Stars FROM reviews
+                         WHERE reviews.MovieID = :id";
+        $averageStatement = $db->prepare($averageQuery);
+        $averageStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $averageStatement->execute();
+        $review = $averageStatement->fetch();
+
+        var_dump($review);
+        echo(round($review['Stars'] * 2) / 2);
     }
 ?>
 
@@ -30,6 +40,8 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="icon" href="images/logo.ico" type="image/ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -83,18 +95,39 @@
                                 <a class="nav-link" href="register.html">Register</a>
                             </li>
                         <?php endif ?>
-                    
-                    
                 </ul>
             </div>
         </nav>
         <div class="container">
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px;">
-                    <h1><?=$movie[0]['Title']?></h1>
-                    <div>
+                    <h1 style="padding-bottom: 5px; border-bottom: 1px solid black;"><?=$movie[0]['Title']?></h1>
+                    <div style="padding-bottom: 10px;">
                         <?=$movie[0]['Description']?>
                     </div>
+                    <?php if(round($review['Stars'] * 2) / 2 == 0) :?>
+                        <img src="images/stars_0.png" alt="0 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 0.5) :?>
+                        <img src="images/stars_0_5.png" alt="0.5 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 1) :?>
+                        <img src="images/stars_1.png" alt="1 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 1.5) :?>
+                        <img src="images/stars_1_5.png" alt="1.5 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 2) :?>
+                        <img src="images/stars_2.png" alt="2 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 2.5) :?>
+                        <img src="images/stars_2_5.png" alt="2.5 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 3) :?>
+                        <img src="images/stars_3.png" alt="3 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 3.5) :?>
+                        <img src="images/stars_3_5.png" alt="3.5 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 4) :?>
+                        <img src="images/stars_4.png" alt="4 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 4.5) :?>
+                        <img src="images/stars_4_5.png" alt="4.5 Stars" style="margin-bottom: 5px;">
+                    <?php elseif(round($review['Stars'] * 2) / 2 == 5) :?>
+                        <img src="images/stars_5.png" alt="5 Stars" style="margin-bottom: 5px;">
+                    <?php endif ?>
                     <p style='margin-top: 5px;'><small>Added On: <?=$movie[0]['AddedOn']?></small></p>
                     <p><small><a href="edit_movie.php?id=<?=$movie[0]['MovieID']?>">Edit/Delete</a></small></p>
                 </div>

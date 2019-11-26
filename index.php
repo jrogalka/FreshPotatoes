@@ -18,6 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    <link rel="icon" href="images/logo.ico" type="image/ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -87,8 +88,7 @@
                         <h2><a href="show_review.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
                         <h3><?=$reviews[$i]['movieTitle']?></h3>
                         <p><?=$reviews[$i]['Content']?></p>
-                        <p><small>Reviewed by: <a href="show_user.php?id=<?=$reviews[$i]['UserID']?>"><?=$reviews[$i]['Username']?></a></small></p>
-                        <p><small>On: <?=$reviews[$i]['CreatedOn']?></small></p>
+                        <p><small>Reviewed by: <a href="show_user.php?id=<?=$reviews[$i]['UserID']?>"><?=$reviews[$i]['Username']?></a> On: <?=$reviews[$i]['CreatedOn']?></small></p>
                         <?php if(isset($_SESSION['UserId'])) :?>
                             <p><small><a href="create_comment.php?id=<?=$reviews[$i]['ReviewID']?>">Comment</a></small></p>
                             <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $reviews[$i]['UserID']) :?>
