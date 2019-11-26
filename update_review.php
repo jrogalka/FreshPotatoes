@@ -37,6 +37,12 @@
     }
     elseif ($_POST['command'] == 'Delete') {
         $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $commentQuery = "DELETE FROM comment
+                         WHERE comment.ReviewID = :id";
+        $commentStatement = $db->prepare($commentQuery);
+        $commentStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $commentStatement->execute();
+
         $query = "DELETE FROM reviews WHERE ReviewID = :id";
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);

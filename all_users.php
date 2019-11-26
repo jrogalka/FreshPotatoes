@@ -4,7 +4,7 @@
     $statement = $db->prepare($query);
     $statement->execute();
     $users = $statement->fetchAll();
-
+    
     //Ensure the user is signed in
     if (!isset($_SESSION['UserId']) && $_SESSION['Role'] == 1) {
         echo '<script language="javascript">';

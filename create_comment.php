@@ -1,18 +1,16 @@
 <?php
     include 'connect.php';
-    $review_query = "SELECT reviews.*, movie.Title AS movieTitle, users.Username, users.UserID FROM reviews
-                     JOIN movie ON movie.MovieID = reviews.MovieID
-                     JOIN users ON users.UserID = reviews.UserID
-                     ORDER BY ReviewID DESC";
-    $review_statement = $db->prepare($review_query);
-    $review_statement->execute();
-    $reviews = $review_statement->fetchAll();
-
-    $userQuery = "SELECT * FROM users";
+    $review = $_GET['id'];
+    //Ensure the user is signed in
+    if (!isset($_SESSION['UserId'])) {
+        echo '<script language="javascript">';
+        echo 'alert("You must be logged in to access this page.");';
+        echo 'window.location.href = "index.php";';
+        echo '</script>';
+    }
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang='en'>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +21,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <title>Fresh Potatoes</title>
+    <title>New Comment</title>
 </head>
-
 <body>
     <div class="jumbotron">
         <img src="images/logo.png" alt="logo" width="150" height="150">
-        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes</a></h1>
+        <h1><a href="index.php" style="color: black; text-decoration: inherit;">Fresh Potatoes - New Comment</a></h1>
     </div>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -40,8 +37,8 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <?php if(isset($_SESSION['UserId']) && $_SESSION['Role'] == 1) :?>
                         <li class="nav-item">
@@ -52,9 +49,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="create_review.php">New Review</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="all_users.php">All Users</a>
                         </li>
                     <?php elseif (isset($_SESSION['UserId'])) :?>
                         <li class="nav-item">
@@ -79,30 +73,28 @@
                 </ul>
             </div>
         </nav>
-
-        <div class='container'>
-            <?php for($i=0; $i<count($reviews); $i++): ?>
-                <div class="row">
-                    <div class="col" style="border: 1px solid black; margin: 5px;">
-                        <h2><a href="show_review.php?id=<?=$reviews[$i]['ReviewID']?>"><?=$reviews[$i]['Title']?></a></h2>
-                        <h3><?=$reviews[$i]['movieTitle']?></h3>
-                        <p><?=$reviews[$i]['Content']?></p>
-                        <p><small>Reviewed by: <a href="show_user.php?id=<?=$reviews[$i]['UserID']?>"><?=$reviews[$i]['Username']?></a></small></p>
-                        <p><small>On: <?=$reviews[$i]['CreatedOn']?></small></p>
-                        <?php if(isset($_SESSION['UserId'])) :?>
-                            <p><small><a href="create_comment.php?id=<?=$reviews[$i]['ReviewID']?>">Comment</a></small></p>
-                            <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $reviews[$i]['UserID']) :?>
-                                <p><small><a href="edit_review.php?id=<?=$reviews[$i]['ReviewID']?>">Edit/Delete</a></small></p>
-                            <?php endif ?>
-                        <?php endif ?>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col" style="border: 1px solid black; margin: 5px;">
+                    <form action="insert_comment.php" method="post">
+                        <fieldset>
+                            <legend>New Comment</legend>
+                            <div class="form-group">
+                              <label for="comment">Comment</label>
+                              <input class="form-control" name="comment" id="comment" />
+                            </div>
+                            <div class="form-group">
+                              <input class="btn btn-primary" type="submit" name="command" value="Create" />
+                            </div>
+                            <input hidden value="<?=$review?>" name="id" id="id">
+                        </fieldset>
+                    </form>
                 </div>
-            <?php endfor ?>
+            </div>
         </div>
         <div class="footer-copyright text-left py-4">
-            FreshPotatoes 2019 - No Rights Reserved
+            FreshPotatoes - No Rights Reserved
         </div>
     </div>
 </body>
-
 </html>

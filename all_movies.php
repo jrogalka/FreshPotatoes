@@ -1,9 +1,45 @@
+<!-- $ratingQuery = "SELECT IFNULL(AVG(reviews.Stars), 0) AS Average FROM reviews
+                    JOIN movie ON movie.MovieID = reviews.MovieID
+                    GROUP BY movie.MovieID";
+    $ratingStatement = $db->prepare($ratingQuery);
+    $ratingStatement->execute();
+    $averageRating = $ratingStatement->fetchAll();
+
+    $ratings = [];
+    for ($x = 0; $x <= sizeOf($averageRating) - 1; $x++) {
+        array_push($ratings, $averageRating[$x][0]);
+    }
+    for ($i=0; $i <= sizeOf($movies) - sizeOf($ratings); $i++) { 
+        array_push($ratings, -1);
+    } -->
 <?php
     include 'connect.php';
-    $query = "SELECT * FROM movie";
+    $query = "SELECT movie.Title, DISTINCT movie.MovieID AS MovieID, movie.Description, movie.AddedOn, reviews.Stars FROM movie
+              LEFT JOIN reviews ON reviews.MovieID = movie.MovieID
+              ORDER BY movie.Title";
     $statement = $db->prepare($query);
     $statement->execute();
     $movies = $statement->fetchAll();
+    for ($i=0; $i < count($movies); $i++) { 
+        if (is_null($movies[$i]['Stars'])) {
+            $movies[$i]['Stars'] = -1;
+        }
+        else {
+            var_dump(getAverage($movies[$i]['MovieID']));
+        }
+    }
+    
+    function getAverage($id){
+            // Create a PDO object called $db.
+        $db = new PDO(DB_DSN, DB_USER, DB_PASS);
+        $averageQuery = "SELECT AVG(Stars) FROM reviews
+                         WHERE reviews.MovieID = :id";
+        $averageStatement = $db->prepare($averageQuery);
+        $averageStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $averageStatement->execute();
+        $average = $averageStatement->fetch();
+        return $average;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,6 +84,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="create_review.php">New Review</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="all_users.php">All Users</a>
+                        </li>
                     <?php elseif (isset($_SESSION['UserId'])) :?>
                         <li class="nav-item">
                             <a class="nav-link" href="create_review.php">New Review</a>
@@ -72,6 +111,8 @@
             </div>
         </nav>
 
+
+
         <div class='container'>
             <?php for($i=0; $i<count($movies); $i++): ?>
                 <div class="row">
@@ -79,6 +120,33 @@
                         <h2><a href="show_movie.php?id=<?=$movies[$i]['MovieID']?>"><?=$movies[$i]['Title']?></a></h2>
                         <p><?=$movies[$i]['Description']?></p>
                         <p><small>Added On: <?=$movies[$i]['AddedOn']?></small></p>
+                        <?php if(($movies[$i]['Stars']) == -1) :?>
+                            <p>No Ratings.</p>
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 0) :?>
+                            <img src="images/stars_0.png" alt="0 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 0.5) :?>
+                            <img src="images/stars_0_5.png" alt="0.5 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 1) :?>
+                            <img src="images/stars_1.png" alt="1 star" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 1.5) :?>
+                            <img src="images/stars_1_5.png" alt="1.5 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 2) :?>
+                            <img src="images/stars_2.png" alt="2 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 2.5) :?>
+                            <img src="images/stars_2_5.png" alt="2.5 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 3) :?>
+                            <img src="images/stars_3.png" alt="3 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 3.5) :?>
+                            <img src="images/stars_3_5.png" alt="3.5 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 4) :?>
+                            <img src="images/stars_4.png" alt="4 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 4.5) :?>
+                            <img src="images/stars_4_5.png" alt="4.5 stars" style="margin-bottom: 5px;">
+                        <?php elseif (round($movies[$i]['Stars'], 1) == 5) :?>
+                            <img src="images/stars_5.png" alt="5 stars" style="margin-bottom: 5px;">
+                        <?php endif ?>
+                        
+                        
                         <p><small><a href="edit_movie.php?id=<?=$movies[$i]['MovieID']?>">Edit/Delete</a></small></p>
                     </div>
                 </div>

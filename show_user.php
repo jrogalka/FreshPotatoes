@@ -11,6 +11,16 @@
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
         $user = $statement->fetch();
+
+        $countQuery = "SELECT COUNT(reviews.ReviewID) AS ReviewCount FROM reviews 
+                       JOIN users ON users.UserID = reviews.UserID 
+                       WHERE reviews.UserID = :id";
+        $countStatement = $db->prepare($countQuery);
+        $countStatement->bindValue(":id", $id);
+        $countStatement->execute();
+        $reviewCount = $countStatement->fetch();
+
+        var_dump($reviewCount);
     }
 ?>
 <!DOCTYPE html>
@@ -79,6 +89,8 @@
             <div class="row">
                 <div class="col" style="border: 1px solid black; margin: 5px; text-align: center;">
                     <h1><?=$user['Username']?></h1>
+                    <img src="images/default_user.jpg" alt="default image">
+                    <h4>Number of Reviews: <?=$reviewCount['ReviewCount']?></h4>
                 </div>
             </div>
         </div>

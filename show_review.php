@@ -16,11 +16,27 @@
         $review_query = "SELECT reviews.ReviewID, reviews.Title, reviews.Content, reviews.Stars, reviews.CreatedOn, movie.Title AS movieTitle FROM reviews
                      JOIN movie ON movie.MovieID = reviews.MovieID
                      WHERE reviews.ReviewID = :id";
-
         $review_statement = $db->prepare($review_query);
-            $review_statement->bindValue(':id', $id, PDO::PARAM_INT);
-            $review_statement->execute();
-            $review = $review_statement->fetchAll();
+        $review_statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $review_statement->execute();
+        $review = $review_statement->fetchAll();
+
+        $commentQuery = "SELECT comment.CommentID, comment.UserID, comment.ReviewID, comment.Content, users.Username FROM comment
+                         JOIN reviews ON reviews.ReviewID = comment.ReviewID
+                         JOIN users ON users.UserID = comment.UserID
+                         WHERE comment.ReviewID = :id
+                         ORDER BY comment.CommentID DESC";
+        $commentStatement = $db->prepare($commentQuery);
+        $commentStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $commentStatement->execute();
+        $comments = $commentStatement->fetchAll();
+
+        $usersQuery = "SELECT users.* FROM users
+                         JOIN reviews ON reviews.UserID = users.UserID";
+        $usersStatement = $db->prepare($usersQuery);
+        $usersStatement->bindValue(':id', $id, PDO::PARAM_INT);
+        $usersStatement->execute();
+        $user = $usersStatement->fetch();
     }
 ?>
 
@@ -100,10 +116,40 @@
                         <?=$review[0]['Content']?>
                     </div>
                     <p style='margin-top: 5px;'><small>Reviewed On: <?=$review[0]['CreatedOn']?></small></p>
-                    <p><small><a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a></small></p>
+                    <?php if(isset($_SESSION['UserId'])) :?>
+                        <?php if($_SESSION['Role'] == 1 || $_SESSION['UserId'] == $reviews[$i]['UserID']) :?>
+                            <p><small><a href="edit_review.php?id=<?=$review[0]['ReviewID']?>">Edit/Delete</a></small></p>
+                        <?php endif ?>
+                        <p><small><a href="create_comment.php?id=<?=$review[0]['ReviewID']?>">Comment</a></small></p>
+                    <?php endif ?>
+                    <p><small>Reviewed by: <a href="show_user.php?id=<?=$user['UserID']?>"><?=$user['Username']?></a></small></p>
+
+                    <!-- Rating Image -->
+                    <?php if($review[0]['Stars'] == 0) :?>
+                        <img src="images/stars_0.png" alt="0 Stars" style="margin-bottom: 5px;">
+                    <?php elseif($review[0]['Stars'] == 1) :?>
+                        <img src="images/stars_1.png" alt="1 Stars" style="margin-bottom: 5px;">
+                    <?php elseif($review[0]['Stars'] == 2) :?>
+                        <img src="images/stars_2.png" alt="2 Stars" style="margin-bottom: 5px;">
+                    <?php elseif($review[0]['Stars'] == 3) :?>
+                        <img src="images/stars_3.png" alt="3 Stars" style="margin-bottom: 5px;">
+                    <?php elseif($review[0]['Stars'] == 4) :?>
+                        <img src="images/stars_4.png" alt="4 Stars" style="margin-bottom: 5px;">
+                    <?php elseif($review[0]['Stars'] == 5) :?>
+                        <img src="images/stars_5.png" alt="5 Stars" style="margin-bottom: 5px;">
+                    <?php endif ?>
                 </div>
             </div>
+            <?php for($i = 0; $i < count($comments); $i++) :?>
+                <div class="row">
+                    <div class="col" style="border: 1px solid black; margin: 5px;">
+                    <p><?=$comments[$i]['Content']?></p>
+                    <p><small><a href="show_user.php?id=<?=$comments[$i]['UserID']?>"><?=$comments[$i]['Username']?></a></small></p>
+                    </div>
+                </div>
+            <?php endfor ?>
         </div>
+        
         <div class="footer-copyright text-left py-4">
             FreshPotatoes 2019 - No Rights Reserved
         </div>
